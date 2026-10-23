@@ -14,6 +14,7 @@ const SOUNDS := {
 	"boss_charge": preload("res://assets/sfx/boss_charge.wav"),
 	"boss_die": preload("res://assets/sfx/boss_die.wav"),
 	"blip": preload("res://assets/sfx/blip.wav"),
+	"crate": preload("res://assets/sfx/crate.wav"),
 }
 
 var _players: Array[AudioStreamPlayer] = []

@@ -110,4 +110,10 @@ save('boss_die', s * env(len(s), release=0.5), 0.7)
 s = square(990, 0.04, 0.5)
 save('blip', s * env(len(s)), 0.2)
 
+# rozbitá bedna: suché prasknutí dřeva
+sec = 0.16
+n = np.convolve(noise(sec), np.ones(3) / 3, mode='same')
+s = n * 0.8 + square(slide(220, 90, sec), sec, 0.3) * 0.35
+save('crate', s * env(len(s), release=1.2), 0.45)
+
 print('zvuků:', len(list(OUT.glob('*.wav'))))

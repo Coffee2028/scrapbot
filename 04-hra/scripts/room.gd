@@ -22,7 +22,6 @@ const DOOR_ROTATION := {
 
 const T_FLOOR := preload("res://assets/sprites/floor.png")
 const T_WALL := preload("res://assets/sprites/wall.png")
-const T_CRATE := preload("res://assets/sprites/crate.png")
 const T_DOOR_OPEN := preload("res://assets/sprites/door_open.png")
 const T_DOOR_CLOSED := preload("res://assets/sprites/door_closed.png")
 const T_HATCH := preload("res://assets/sprites/hatch.png")
@@ -35,6 +34,7 @@ const ENEMIES := {
 const BOSS := preload("res://scripts/enemies/boss_forklift.gd")
 const PICKUP := preload("res://scripts/pickup.gd")
 const PEDESTAL := preload("res://scripts/item_pedestal.gd")
+const CRATE := preload("res://scripts/crate.gd")
 
 var data: Dictionary
 var player: Node2D
@@ -177,6 +177,23 @@ func _build_door(dir: Vector2i, center: Vector2) -> void:
 	add_child(trigger)
 
 
+## Pro pomocníka u dveří (player.gd): když robot jde k otevřeným dveřím a je
+## blízko, vrátí, o kolik je vedle středu průchodu. Jinak vrátí Vector2.ZERO.
+func door_offset(body_pos: Vector2, move: Vector2) -> Vector2:
+	if not doors_open:
+		return Vector2.ZERO
+	for dir in _door_sprites:
+		var d := Vector2(dir)
+		if move.dot(d) < 0.3:                      # robot nejde směrem k těmto dveřím
+			continue
+		var to_door: Vector2 = _door_sprites[dir].position - body_pos
+		var ahead := to_door.dot(d)                # jak daleko jsou dveře před robotem
+		var beside := to_door - d * ahead          # o kolik je robot vedle středu dveří
+		if ahead > -4.0 and ahead < 40.0 and beside.length() < 13.0:
+			return beside
+	return Vector2.ZERO
+
+
 func _set_doors(open: bool, with_sound: bool) -> void:
 	doors_open = open
 	for dir in _door_sprites:
@@ -187,31 +204,23 @@ func _set_doors(open: bool, with_sound: bool) -> void:
 
 
 func _add_crate(pos: Vector2) -> void:
-	var crate := StaticBody2D.new()
-	crate.position = pos
-	crate.collision_layer = 1
-	crate.add_to_group("crates")
-	var s := Sprite2D.new()
-	s.texture = T_CRATE
-	crate.add_child(s)
-	var shape := CollisionShape2D.new()
-	var r := RectangleShape2D.new()
-	r.size = Vector2(14, 14)
-	shape.shape = r
-	crate.add_child(shape)
-	crate.set_meta("pos", pos)
+	var crate := CRATE.new()
+	crate.setup(pos, self)
 	add_child(crate)
 
 
-## EMP nálož rozbila bednu: zmizí i z dat místnosti a občas z ní vypadne šroub.
+## Bedna je rozbitá (rozstřílená nebo od EMP): zmizí i z dat místnosti,
+## aby tu po návratu už nebyla, a občas z ní vypadne šroub.
 func break_crate(crate: Node2D) -> void:
 	if not is_instance_valid(crate) or crate.is_queued_for_deletion():
 		return
-	var pos: Vector2 = crate.get_meta("pos")
+	var pos: Vector2 = crate.position
 	data["crates"].erase(pos)
-	Fx.sparks(self, pos, "yellow", 10)
+	Sfx.play("crate", -2.0)
+	Fx.sparks(self, pos, "wood", 14, 80.0)
+	Fx.sparks(self, pos, "yellow", 4, 50.0)
 	crate.queue_free()
-	if randf() < 0.4:
+	if randf() < 0.25:
 		drop("screw", pos)
 
 

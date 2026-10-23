@@ -49,7 +49,7 @@ Nápověda v horní liště se sama přepne podle toho, čím hráč zrovna hraj
 ## Co prototyp obsahuje
 
 - **Patro z 10 místností**, při každém pokusu jiné: start, běžné místnosti, pokladová místnost, obchod a místnost s bossem.
-- **Zavřené dveře** – dokud robot nezničí všechny nepřátele v místnosti, nedostane se ven.
+- **Zavřené dveře** – dokud robot nezničí všechny nepřátele v místnosti, nedostane se ven. U otevřených dveří robota jemně navede do středu průchodu, aby se nezasekl o roh zdi.
 - **3 druhy nepřátel a boss:**
 
 | Nepřítel | Životy | Chování |
@@ -60,7 +60,8 @@ Nápověda v horní liště se sama přepne podle toho, čím hráč zrovna hraj
 | **Kladivo** (boss) | 45 | vysokozdvižný vozík: najíždí na robota, po nárazu do zdi rozhází kruh střel, mezi nájezdy střílí vějíře; pod polovinou života se rozzuří a zrychlí |
 
 - **Věci na zemi:** článek baterie (+1 život), šroub (peníze), EMP nálož.
-- **EMP nálož:** po chvíli vybuchne, zraní nepřátele v okolí a rozbije bedny (občas z nich vypadne šroub).
+- **Bedny:** robot je rozstřílí (dva obyčejné zásahy, po prvním praskne) nebo rozbije EMP nálož. Občas z nich vypadne šroub. Střely nepřátel se o bedny jen zastaví, takže slouží jako kryt.
+- **EMP nálož:** po chvíli vybuchne, zraní nepřátele v okolí a rozbije bedny v dosahu.
 - **5 předmětů** (vylepšení robota):
 
 | Předmět | Účinek |
@@ -135,6 +136,7 @@ Hra má čtyři stavy: **TITLE** (hlavní menu) → **PLAYING** (hraje se) ⇄ *
 │   ├── player.gd            robot: pohyb, střelba, životy, účinky předmětů
 │   ├── bullet.gd            střela robota i nepřátel (včetně samonavádění)
 │   ├── emp.gd               EMP nálož
+│   ├── crate.gd             bedna (rozstřílení, prasklina)
 │   ├── pickup.gd            věci na zemi (baterie, šroub, EMP)
 │   ├── item_pedestal.gd     podstavec s předmětem
 │   ├── items.gd             seznam předmětů (název, popis, ikona)
@@ -152,8 +154,8 @@ Hra má čtyři stavy: **TITLE** (hlavní menu) → **PLAYING** (hraje se) ⇄ *
 │       ├── turret.gd        věžička
 │       └── boss_forklift.gd boss Kladivo
 ├── assets/
-│   ├── sprites/             24 obrázků v pixel artu
-│   └── sfx/                 12 zvukových efektů
+│   ├── sprites/             25 obrázků v pixel artu
+│   └── sfx/                 13 zvukových efektů
 └── screenshoty/             obrázky do tohoto README (Godot je ignoruje díky .gdignore)
 ```
 
@@ -168,6 +170,8 @@ Soubory `.import` a `.uid` vytváří Godot sám. Patří do gitu a nemají se m
 | počet místností | `floor_gen.gd` → `ROOM_COUNT` |
 | životy, rychlost a střelba robota | `player.gd` → `max_cells`, `speed`, `fire_delay`, `damage` |
 | ceny v obchodě | `floor_gen.gd` → `_place_items()` |
+| výdrž beden | `crate.gd` → `MAX_HP` |
+| šance na šroub z bedny | `room.gd` → `break_crate()` |
 | nový předmět | záznam v `items.gd` + účinek v `player.gd` → `apply_item()` + ikona v `assets/sprites/` |
 
 ## Statistiky a hypotézy

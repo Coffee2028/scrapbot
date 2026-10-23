@@ -8,6 +8,7 @@ signal died
 
 const TEX := preload("res://assets/sprites/player.png")
 const EMP_SCRIPT := preload("res://scripts/emp.gd")
+const BODY_OFFSET := Vector2(0, 2)   # tělo (kolize) je o 2 px níž než střed obrázku
 
 # --- vlastnosti, které mění předměty ---
 var speed := 85.0
@@ -39,11 +40,12 @@ func _ready() -> void:
 	sprite = Sprite2D.new()
 	sprite.texture = TEX
 	add_child(sprite)
+	# tělo je kruh: o rohy zdí a beden se nezasekne, ale sklouzne kolem nich
 	var shape := CollisionShape2D.new()
-	var rect := RectangleShape2D.new()
-	rect.size = Vector2(10, 10)
-	shape.shape = rect
-	shape.position = Vector2(0, 2)
+	var circle := CircleShape2D.new()
+	circle.radius = 5.0
+	shape.shape = circle
+	shape.position = BODY_OFFSET
 	add_child(shape)
 	collision_layer = 2       # vrstva 2: robot
 	collision_mask = 1        # naráží do zdí a beden
@@ -76,6 +78,7 @@ func _physics_process(delta: float) -> void:
 		move = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		aim = _aim_direction()
 	velocity = velocity.move_toward(move * speed, 900.0 * delta)
+	_door_assist(move)
 	move_and_slide()
 
 	# drobná animace chůze a otáčení podle směru
@@ -95,6 +98,19 @@ func _physics_process(delta: float) -> void:
 		if body.is_in_group("enemies") and body.is_active():
 			take_damage(1)
 			break
+
+
+## Když robot míří do otevřených dveří a je jen kousek vedle, jemně ho navedeme
+## do středu průchodu (jako v Isaacovi), aby se nezasekl o roh zdi.
+func _door_assist(move: Vector2) -> void:
+	if room == null or move == Vector2.ZERO or not room.has_method("door_offset"):
+		return
+	var fix: Vector2 = room.door_offset(position + BODY_OFFSET, move)
+	if fix == Vector2.ZERO:
+		return
+	var along := fix.normalized()
+	velocity -= along * velocity.dot(along)                     # zrušíme pohyb podél zdi…
+	velocity += along * minf(fix.length() * 12.0, speed)        # …a posuneme robota ke středu
 
 
 ## Směr střelby jen do 4 stran: vybere převládající směr ze šipek / pravé páčky.

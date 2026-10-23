@@ -38,6 +38,7 @@ Základní dlaždice má 16 × 16 px. Hra běží v rozlišení 384 × 216 px a 
 | `boss_forklift.png` | 32 × 32 | boss Kladivo (vysokozdvižný vozík) |
 | `bullet_player.png`, `bullet_enemy.png` | 6 × 6 | střely robota a nepřátel |
 | `floor.png`, `wall.png`, `crate.png` | 16 × 16 | podlaha, zeď, bedna |
+| `crate_cracked.png` | 16 × 16 | naštípnutá bedna (po prvním zásahu) |
 | `door_open.png`, `door_closed.png` | 16 × 16 | dveře (kreslené pro horní stěnu, hra je otáčí) |
 | `hatch.png` | 16 × 16 | poklop do dalšího patra |
 | `pedestal.png` | 16 × 16 | podstavec pro předmět |
@@ -64,6 +65,7 @@ Krátké retro zvuky (16bitové mono WAV, 22 050 Hz) složené z obdélníkové 
 | `boss_charge.wav` | boss se chystá k nájezdu |
 | `boss_die.wav` | zničení bosse |
 | `blip.wav` | pohyb v menu |
+| `crate.wav` | zásah a rozbití bedny |
 
 ## Jak assety znovu vygenerovat
 

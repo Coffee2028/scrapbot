@@ -7,6 +7,7 @@ const SPARK_COLORS := {
 	"yellow": Color(1.0, 0.8, 0.2),
 	"white": Color(0.95, 0.95, 1.0),
 	"violet": Color(0.6, 0.4, 1.0),
+	"wood": Color(0.62, 0.42, 0.24),
 }
 
 

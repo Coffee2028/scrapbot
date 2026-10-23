@@ -235,6 +235,25 @@ grid('crate', [
     "kbbbbbbbbbbbbbbk",
     "kkkkkkkkkkkkkkkk",
 ])
+# naštípnutá bedna (po prvním zásahu): prasklina a uštípnutý roh
+grid('crate_cracked', [
+    "..kkkkkkkkkkkkkk",
+    ".kkbbbbbbbkbbbbk",
+    "kkBkkkkkkkkkkBbk",
+    "kbkbbbbbbkbbbkbk",
+    "kbkBbbbbbbkbBkbk",
+    "kbkbBbbbbkbBbkbk",
+    "kbkbbBbbbkBbbkbk",
+    "kbkbbbBbkbBbbkbk",
+    "kbkbbbbkBbbbbkbk",
+    "kbkbbbkbbBbbbkbk",
+    "kbkbbBbkbbBbbkbk",
+    "kbkbkbbbkbbBbkbk",
+    "kbkBbbbbbkbbBkbk",
+    "kbBkkkkkkkkkkBbk",
+    "kbbbbkbbbbbbbbbk",
+    "kkkkkkkkkkkkkkkk",
+])
 
 # dveře jsou nakreslené pro HORNÍ stěnu; pro ostatní strany je hra otočí
 grid('door_closed', [
