@@ -12,8 +12,10 @@
 | **Žánr** | roguelike, bullet hell, střílečka z pohledu shora |
 | **Engine** | Godot 4 (GDScript) |
 | **Platforma** | Windows |
-| **Stav projektu** | ideový plán |
+| **Stav projektu** | hratelný prototyp (verze 0.1) |
 | **Licence** | [MIT](LICENSE) |
+
+![SCRAPBOT – boj v místnosti](04-hra/screenshoty/boj.png)
 
 ## O hře
 
@@ -21,14 +23,18 @@ SCRAPBOT je 2D roguelike střílečka z pohledu shora inspirovaná hrou *The Bin
 
 Podrobný popis je v [ideovém plánu](01-ideovy-plan/README.md).
 
+## Prototyp
+
+Hratelný prototyp obsahuje jedno náhodně generované patro z 10 místností, tři druhy nepřátel, pokladovou místnost, obchod a bosse Kladivo. Hrát se dá na klávesnici i na herním ovladači. Jak hru spustit a jak funguje kód, popisuje [04 – Hra](04-hra/README.md).
+
 ## Rozcestník
 
 | # | Část projektu | Obsah | Stav |
 |---|---|---|---|
 | 01 | [Ideový plán](01-ideovy-plan/README.md) | název, úvodník, popis hry, audiovizuál, technologie, hypotézy | hotovo |
 | 02 | [Game design](02-game-design/README.md) | předměty, nepřátelé, bossové, místnosti, vyvážení | připravuje se |
-| 03 | [Assety](03-assety/README.md) | grafika, zvukové efekty, hudba | připravuje se |
-| 04 | [Hra](04-hra/README.md) | projekt v Godotu, zdrojový kód | připravuje se |
+| 03 | [Assety](03-assety/README.md) | grafika, zvukové efekty, hudba | prototyp |
+| 04 | [Hra](04-hra/README.md) | projekt v Godotu, zdrojový kód | prototyp v0.1 |
 | 05 | [Testování](05-testovani/README.md) | výsledky testů, ověření hypotéz | připravuje se |
 
 ### Kapitoly ideového plánu
@@ -49,7 +55,7 @@ Podrobný popis je v [ideovém plánu](01-ideovy-plan/README.md).
 scrapbot/
 ├── 01-ideovy-plan/   ideový plán hry
 ├── 02-game-design/   podrobný návrh herních mechanik
-├── 03-assety/        grafika, zvuky a hudba
+├── 03-assety/        grafika, zvuky a hudba (+ skripty, které je vytvářejí)
 ├── 04-hra/           projekt v Godotu 4
 ├── 05-testovani/     testování a ověření hypotéz
 ├── LICENSE
