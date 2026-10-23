@@ -224,9 +224,37 @@ func _add_pickup(p: Dictionary) -> void:
 
 ## Nová věc na zemi (zapíše se i do dat, aby tu zůstala, když hráč odejde a vrátí se).
 func drop(kind: String, pos: Vector2) -> void:
-	var p := {"kind": kind, "pos": pos, "price": 0}
+	var p := {"kind": kind, "pos": _free_spot(pos), "price": 0}
 	data["pickups"].append(p)
 	call_deferred("_add_pickup", p)   # odloženě: může se volat uprostřed fyziky
+
+
+## Najde místo pro věc na zemi: uvnitř místnosti a ne v bedně ani na podstavci,
+## jinak by na ni robot nedosáhl. Když je místo obsazené, vezme nejbližší volnou dlaždici.
+func _free_spot(pos: Vector2) -> Vector2:
+	pos = pos.clamp(Vector2(TILE + 8, TILE + 8), Vector2((W - 1) * TILE - 8, (H - 1) * TILE - 8))
+	if not _blocked(pos):
+		return pos
+	var best := pos
+	var best_dist := INF
+	for x in range(1, W - 1):
+		for y in range(1, H - 1):
+			var c := Vector2(x * TILE + TILE / 2.0, y * TILE + TILE / 2.0)
+			if not _blocked(c) and c.distance_to(pos) < best_dist:
+				best = c
+				best_dist = c.distance_to(pos)
+	return best
+
+
+## true, když by věc na tomhle místě ležela v bedně nebo na podstavci s předmětem.
+func _blocked(pos: Vector2) -> bool:
+	for crate_pos in data["crates"]:
+		if absf(crate_pos.x - pos.x) < 14.0 and absf(crate_pos.y - pos.y) < 14.0:
+			return true
+	for item in data["items"]:
+		if item["pos"].distance_to(pos) < 14.0:
+			return true
+	return false
 
 
 func _add_hatch() -> void:
